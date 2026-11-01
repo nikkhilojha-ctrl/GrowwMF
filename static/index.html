@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mutual Fund FAQ Assistant</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="banner">
+    <p class="disclaimer"><strong>Facts-only. No investment advice.</strong></p>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <button type="button" id="new-chat">New chat</button>
+      <nav aria-label="Conversations">
+        <ul id="thread-list"></ul>
+      </nav>
+      <a id="groww-link" class="groww-link" hidden target="_blank" rel="noopener noreferrer">View on Groww</a>
+    </aside>
+    <main>
+      <h1>UTI Mutual Fund FAQ</h1>
+      <div id="transcript" aria-live="polite">
+        <section id="welcome">
+          <p>This assistant answers factual questions about ten UTI Mutual Fund schemes: expense ratio, exit load, minimum SIP, ELSS lock-in, riskometer, benchmark, and how to download a statement or capital-gains report. It refuses investment advice and comparisons.</p>
+          <div class="examples">
+            <button type="button" class="example" data-question="What is the expense ratio of UTI Nifty Fund Direct Growth?">What is the expense ratio of UTI Nifty Fund Direct Growth?</button>
+            <button type="button" class="example" data-question="What is the ELSS lock-in period for UTI Long Term Equity Fund (Tax Saving) Direct Growth?">What is the ELSS lock-in period for UTI Long Term Equity Fund (Tax Saving) Direct Growth?</button>
+            <button type="button" class="example" data-question="How do I download a mutual fund capital gains statement?">How do I download a mutual fund capital gains statement?</button>
+          </div>
+        </section>
+      </div>
+      <form id="composer">
+        <label for="question">Question</label>
+        <textarea id="question" name="question" maxlength="1000" rows="3" autocomplete="off" placeholder="Do not paste PAN, Aadhaar, account numbers, OTPs, email, or phone numbers."></textarea>
+        <div class="composer-actions">
+          <p id="char-count">0 / 1,000</p>
+          <button type="submit" id="send">Send</button>
+        </div>
+        <p id="active-scheme" class="active-scheme" hidden></p>
+        <p id="composer-error" class="composer-error" role="alert"></p>
+      </form>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+# The only URLs refusal templates may cite. Both also appear in manifest.yaml.
+amfi_url: https://www.amfiindia.com/investor/knowledge-center-info?zoneName=riskInMutualFunds
+sebi_url: https://investor.sebi.gov.in/understanding_mf.html

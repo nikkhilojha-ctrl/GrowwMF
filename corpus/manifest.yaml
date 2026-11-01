@@ -1,0 +1,99 @@
+# Official corpus. Hosts are checked at load: www.utimf.com, utimf.com, AMFI, and SEBI only.
+#
+# Factsheet, KIM, and SID PDFs for these schemes are published on
+# d3ce1o48hc5oli.cloudfront.net and doc.utimf.com. Those hosts are outside the
+# allowlist, so they are not corpus URLs. Each scheme row below is the official
+# www.utimf.com scheme page. The fetched HTML publishes exit load, minimum
+# investment (lumpsum), benchmark, and riskometer. Daily TER (%) is labeled
+# but the figure is filled in the browser after load, so expense_ratio has
+# no source span. Minimum SIP is not a separate label. primary_url in
+# schemes.yaml points at the same page.
+#
+# The shared factsheet row is the UTI downloads page, which is the public
+# factsheet index (year and month). The PDF file it links to is on CloudFront
+# and is not indexed.
+
+- url: https://www.utimf.com/mutual-funds/uti-nifty-50-index-fund
+  scheme_id: uti-nifty
+  doc_type: factsheet
+  title: UTI Nifty 50 Index Fund
+
+- url: https://www.utimf.com/mutual-funds/uti-small-cap-fund
+  scheme_id: uti-small-cap
+  doc_type: factsheet
+  title: UTI Small Cap Fund
+
+- url: https://www.utimf.com/mutual-funds/uti-large-mid-cap-fund
+  scheme_id: uti-large-mid-cap
+  doc_type: factsheet
+  title: UTI Large and Mid Cap Fund
+
+- url: https://www.utimf.com/mutual-funds/uti-flexi-cap-fund-formerly-known-uti-equity-fund
+  scheme_id: uti-equity
+  doc_type: factsheet
+  title: UTI Flexi Cap Fund (formerly UTI Equity Fund)
+
+- url: https://www.utimf.com/mutual-funds/uti-large-cap-fund
+  scheme_id: uti-mastershare
+  doc_type: factsheet
+  title: UTI Large Cap Fund (Unit Scheme 1986 Mastershare)
+
+- url: https://www.utimf.com/mutual-funds/uti-mid-cap-fund
+  scheme_id: uti-mid-cap
+  doc_type: factsheet
+  title: UTI Mid Cap Fund
+
+- url: https://www.utimf.com/mutual-funds/uti-elss-tax-saver-fund
+  scheme_id: uti-elss
+  doc_type: factsheet
+  title: UTI ELSS Tax Saver Fund
+
+- url: https://www.utimf.com/mutual-funds/uti-aggressive-hybrid-fund
+  scheme_id: uti-balanced
+  doc_type: factsheet
+  title: UTI Aggressive Hybrid Fund (formerly UTI Hybrid Equity Fund)
+
+- url: https://www.utimf.com/mutual-funds/uti-short-term-fund
+  scheme_id: uti-short-term
+  doc_type: factsheet
+  title: UTI Short Term Fund
+
+- url: https://www.utimf.com/mutual-funds/uti-silver-etf-fund-of-fund
+  scheme_id: uti-silver-etf-fof
+  doc_type: factsheet
+  title: UTI Silver ETF Fund of Fund
+
+- url: https://www.utimf.com/downloads/kim
+  scheme_id: null
+  doc_type: factsheet
+  title: UTI factsheet index
+
+- url: https://www.utimf.com/downloads/sid
+  scheme_id: null
+  doc_type: sid
+  title: UTI Scheme Information Document library
+
+- url: https://www.utimf.com/investor-services/statement-mailback-request
+  scheme_id: null
+  doc_type: statement_guide
+  title: UTI statement of account request
+
+- url: https://www.utimf.com/investor-services
+  scheme_id: null
+  doc_type: amc_faq
+  title: UTI investor services
+
+- url: https://www.amfiindia.com/online-center/download-cas
+  scheme_id: null
+  doc_type: statement_guide
+  title: AMFI consolidated account statement download
+
+- url: https://www.amfiindia.com/investor/knowledge-center-info?zoneName=riskInMutualFunds
+  scheme_id: null
+  doc_type: amfi
+  title: AMFI investor education on mutual fund risk
+
+- url: https://investor.sebi.gov.in/understanding_mf.html
+  scheme_id: null
+  doc_type: sebi
+  title: SEBI investor education on understanding mutual funds

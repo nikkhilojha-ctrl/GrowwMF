@@ -1,0 +1,61 @@
+{
+  "retrieved_at": "2026-10-25T00:00:00.000000Z",
+  "facts": [
+    {
+      "scheme_id": "uti-nifty",
+      "field": "expense_ratio",
+      "value_text": "Direct plan TER 0.18%",
+      "source_url": "https://www.utimf.com/mutual-funds/uti-nifty-50-index-fund",
+      "note": "Sanitized stand-in. The allowlisted UTI HTML pages do not include an expense-ratio span, so this row exists only to prove the quote path offline."
+    },
+    {
+      "scheme_id": "uti-elss",
+      "field": "expense_ratio",
+      "value_text": "Direct plan TER 1.12%",
+      "source_url": "https://www.utimf.com/mutual-funds/uti-elss-tax-saver-fund",
+      "note": "Sanitized stand-in, different from the Nifty figure, so two threads cannot share a number. Not a live TER."
+    },
+    {
+      "scheme_id": "uti-elss",
+      "field": "lock_in",
+      "value_text": "Lock-in-period of 3 years from the date of for each investment",
+      "source_url": "https://www.utimf.com/mutual-funds/uti-elss-tax-saver-fund",
+      "note": "Copied from the ingested ELSS lock-in span."
+    },
+    {
+      "scheme_id": "uti-small-cap",
+      "field": "exit_load",
+      "value_text": "Less than one year: 1% and Greater than or equal to one year: Nil",
+      "source_url": "https://www.utimf.com/mutual-funds/uti-small-cap-fund",
+      "note": "Contiguous excerpt of the ingested small-cap exit-load span, without the W.e.f. prefix."
+    },
+    {
+      "scheme_id": "uti-short-term",
+      "field": "minimum_sip",
+      "value_text": "Rs. 500",
+      "source_url": "https://www.utimf.com/mutual-funds/uti-short-term-fund",
+      "note": "Sanitized stand-in. The allowlisted pages do not publish a separate minimum-SIP span."
+    },
+    {
+      "scheme_id": "uti-silver-etf-fof",
+      "field": "riskometer",
+      "value_text": "Very High",
+      "source_url": "https://www.utimf.com/mutual-funds/uti-silver-etf-fund-of-fund",
+      "note": "Copied from the ingested silver FoF riskometer span."
+    },
+    {
+      "scheme_id": "uti-balanced",
+      "field": "benchmark",
+      "value_text": "CRISIL Hybrid 35+65 Aggressive Index",
+      "source_url": "https://www.utimf.com/mutual-funds/uti-aggressive-hybrid-fund",
+      "note": "Copied from the ingested hybrid benchmark span."
+    },
+    {
+      "scheme_id": "uti-mid-cap",
+      "field": "benchmark",
+      "value_text": "Nifty Midcap 150 TRI",
+      "source_url": "https://www.utimf.com/mutual-funds/uti-mid-cap-fund",
+      "note": "Copied from the ingested mid-cap benchmark span. The missing-fact question deletes this row before it asks."
+    }
+  ]
+}

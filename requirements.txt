@@ -1,0 +1,13 @@
+# Mutual Fund FAQ Assistant
+# Target interpreter: Python 3.11 (verified here on 3.12).
+# Local embeddings only. Groq is called with httpx in Phase 7, not from here.
+
+fastapi>=0.115.0
+uvicorn>=0.32.0
+pydantic>=2.9.0
+PyYAML>=6.0.2
+httpx>=0.27.0
+trafilatura>=2.0.0
+pypdf>=5.0.0
+sentence-transformers>=3.3.0
+pytest>=8.3.0

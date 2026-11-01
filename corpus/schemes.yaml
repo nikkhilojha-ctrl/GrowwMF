@@ -1,0 +1,130 @@
+# Closed set from the architecture table. Groww URLs are reference links only.
+# UTI's current public names differ from some Groww labels:
+#   uti-equity is published as UTI Flexi Cap Fund (formerly UTI Equity Fund)
+#   uti-mastershare is published as UTI Large Cap Fund (Unit Scheme, October 1986)
+#   uti-balanced is published as UTI Aggressive Hybrid Fund (formerly UTI Hybrid Equity Fund)
+# Categories follow the problem statement until a SID is parsed in Phase 4.
+- scheme_id: uti-nifty
+  name: UTI Nifty Fund Direct Growth
+  aliases:
+    - UTI Nifty Fund
+    - UTI Nifty
+    - uti nifty
+    - nifty 50 index fund
+    - UTI Nifty 50 Index Fund
+    - uti-nifty-fund-direct-growth
+  category: Index
+  groww_url: https://groww.in/mutual-funds/uti-nifty-fund-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-nifty-50-index-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-nifty-50-index-fund
+
+- scheme_id: uti-small-cap
+  name: UTI Small Cap Fund Direct Growth
+  aliases:
+    - UTI Small Cap Fund
+    - UTI Small Cap
+    - small cap fund
+    - uti-small-cap-fund-direct-growth
+  category: small cap
+  groww_url: https://groww.in/mutual-funds/uti-small-cap-fund-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-small-cap-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-small-cap-fund
+
+- scheme_id: uti-large-mid-cap
+  name: UTI Large & Mid Cap Fund Direct Growth
+  aliases:
+    - UTI Large and Mid Cap Fund
+    - large and mid cap
+    - large and mid
+    - UTI Core Equity Fund
+    - uti-large-mid-cap-fund-direct-growth
+  category: large and mid cap
+  groww_url: https://groww.in/mutual-funds/uti-large-mid-cap-fund-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-large-mid-cap-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-large-mid-cap-fund
+
+- scheme_id: uti-equity
+  name: UTI Equity Fund Direct Growth
+  aliases:
+    - UTI Equity Fund
+    - UTI Flexi Cap Fund
+    - flexi cap
+    - uti-equity-fund-direct-growth
+  category: flexi cap
+  groww_url: https://groww.in/mutual-funds/uti-equity-fund-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-flexi-cap-fund-formerly-known-uti-equity-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-flexi-cap-fund-formerly-known-uti-equity-fund
+
+- scheme_id: uti-mastershare
+  name: UTI Unit Scheme 1986 Mastershare Direct Growth
+  aliases:
+    - UTI Mastershare
+    - mastershare
+    - Unit Scheme 1986
+    - UTI Large Cap Fund
+    - uti-unit-scheme-1986-mastershare-direct-growth
+  category: large cap
+  groww_url: https://groww.in/mutual-funds/uti-unit-scheme-1986-mastershare-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-large-cap-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-large-cap-fund
+
+- scheme_id: uti-mid-cap
+  name: UTI Mid Cap Fund Direct Growth
+  aliases:
+    - UTI Mid Cap Fund
+    - UTI Mid Cap
+    - mid cap
+    - uti-mid-cap-fund-direct-growth
+  category: mid cap
+  groww_url: https://groww.in/mutual-funds/uti-mid-cap-fund-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-mid-cap-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-mid-cap-fund
+
+- scheme_id: uti-elss
+  name: UTI Long Term Equity Fund (Tax Saving) Direct Growth
+  aliases:
+    - UTI Long Term Equity Fund
+    - UTI ELSS Tax Saver Fund
+    - tax saver
+    - tax saving
+    - ELSS
+    - uti-long-term-equity-fund-tax-saving-direct-growth
+  category: ELSS
+  groww_url: https://groww.in/mutual-funds/uti-long-term-equity-fund-tax-saving-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-elss-tax-saver-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-elss-tax-saver-fund
+
+- scheme_id: uti-balanced
+  name: UTI Balanced Fund Direct Growth
+  aliases:
+    - UTI Balanced Fund
+    - UTI Aggressive Hybrid Fund
+    - UTI Hybrid Equity Fund
+    - uti-balanced-fund-direct-growth
+  category: hybrid
+  groww_url: https://groww.in/mutual-funds/uti-balanced-fund-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-aggressive-hybrid-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-aggressive-hybrid-fund
+
+- scheme_id: uti-short-term
+  name: UTI Short Term Fund Direct Growth
+  aliases:
+    - UTI Short Term Fund
+    - short term fund
+    - uti-short-term-direct-growth
+  category: short-duration debt
+  groww_url: https://groww.in/mutual-funds/uti-short-term-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-short-term-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-short-term-fund
+
+- scheme_id: uti-silver-etf-fof
+  name: UTI Silver ETF Fund of Fund Direct Growth
+  aliases:
+    - UTI Silver ETF Fund of Fund
+    - silver etf
+    - silver fof
+    - uti-silver-etf-fof-direct-growth
+  category: commodity FoF
+  groww_url: https://groww.in/mutual-funds/uti-silver-etf-fof-direct-growth
+  factsheet_url: https://www.utimf.com/mutual-funds/uti-silver-etf-fund-of-fund
+  primary_url: https://www.utimf.com/mutual-funds/uti-silver-etf-fund-of-fund
