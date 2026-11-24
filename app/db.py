@@ -72,7 +72,8 @@ CREATE TABLE IF NOT EXISTS threads (
     title TEXT NOT NULL,
     active_scheme_id TEXT REFERENCES schemes(scheme_id),
     created_at TEXT NOT NULL,
-    updated_at TEXT NOT NULL
+    updated_at TEXT NOT NULL,
+    client_id TEXT
 );
 
 CREATE TABLE IF NOT EXISTS messages (
@@ -160,6 +161,7 @@ def init_database(path: Path) -> None:
     conn = connect(path)
     try:
         conn.executescript(SCHEMA)
+        _migrate(conn)
         conn.execute("BEGIN IMMEDIATE")
         try:
             conn.execute("INSERT INTO chunks_fts(chunks_fts) VALUES ('rebuild')")
@@ -171,6 +173,16 @@ def init_database(path: Path) -> None:
             conn.execute("COMMIT")
     finally:
         conn.close()
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    """Upgrade databases created before threads were scoped to a browser."""
+    columns = {row["name"] for row in conn.execute("PRAGMA table_info(threads)")}
+    if "client_id" not in columns:
+        conn.execute("ALTER TABLE threads ADD COLUMN client_id TEXT")
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS threads_client_id ON threads(client_id, updated_at)"
+    )
 
 
 def _seed_schemes(conn: sqlite3.Connection) -> None:

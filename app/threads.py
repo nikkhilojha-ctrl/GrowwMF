@@ -1,4 +1,8 @@
-"""Thread API. Every message read and write is limited to one thread_id."""
+"""Thread API. Every message read and write is limited to one thread_id.
+
+Threads belong to one anonymous browser, identified by an HttpOnly cookie, so a
+visitor only ever sees the threads that browser created.
+"""
 
 from __future__ import annotations
 
@@ -7,10 +11,11 @@ import sqlite3
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from pydantic import BaseModel, ConfigDict
 
 from app.db import display_date, read_db, transaction, utc_now
+from app.ratelimit import enforce_message_limit
 from app.guard.intent import GuardResult, classify
 from app.rag.generate import Answer, answer_from_retrieval
 from app.rag.retrieve import retrieve
@@ -24,15 +29,18 @@ NEW_CONVERSATION_TITLE = "New conversation"
 REDACTED_USER_TEXT = "[removed: personal data]"
 MAX_MESSAGE_CHARS = 1000
 TITLE_MAX = 80
+CLIENT_COOKIE = "mf_client"
+CLIENT_COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
 INSERT_THREAD = """
-INSERT INTO threads (thread_id, title, active_scheme_id, created_at, updated_at)
-VALUES (?, ?, NULL, ?, ?)
+INSERT INTO threads (thread_id, title, active_scheme_id, created_at, updated_at, client_id)
+VALUES (?, ?, NULL, ?, ?, ?)
 """
 
 LIST_THREADS = """
 SELECT thread_id, title, active_scheme_id, updated_at
 FROM threads
+WHERE client_id = ?
 ORDER BY updated_at DESC, rowid DESC
 """
 
@@ -40,6 +48,12 @@ SELECT_THREAD = """
 SELECT thread_id, title, active_scheme_id, created_at, updated_at
 FROM threads
 WHERE thread_id = ?
+"""
+
+SELECT_OWN_THREAD = """
+SELECT thread_id, title, active_scheme_id, created_at, updated_at
+FROM threads
+WHERE thread_id = ? AND client_id = ?
 """
 
 UPDATE_THREAD = """
@@ -125,19 +139,48 @@ def database_path(request: Request) -> Path:
     return request.app.state.database_path
 
 
+def client_id(request: Request, response: Response) -> str:
+    """The browser's anonymous id. A missing or malformed cookie gets a new one."""
+    raw = request.cookies.get(CLIENT_COOKIE, "")
+    try:
+        return str(uuid.UUID(raw))
+    except ValueError:
+        pass
+    new_id = str(uuid.uuid4())
+    response.set_cookie(
+        CLIENT_COOKIE,
+        new_id,
+        max_age=CLIENT_COOKIE_MAX_AGE,
+        path="/",
+        httponly=True,
+        samesite="lax",
+        secure=request.url.scheme == "https",
+    )
+    return new_id
+
+
 @router.post("/threads", response_model=ThreadCreated, response_model_exclude_none=False)
-def create_thread(path: Path = Depends(database_path)) -> ThreadCreated:
+def create_thread(
+    path: Path = Depends(database_path),
+    client: str = Depends(client_id),
+) -> ThreadCreated:
     thread_id = str(uuid.uuid4())
     created_at = utc_now()
     with transaction(path) as conn:
-        conn.execute(INSERT_THREAD, (thread_id, NEW_CONVERSATION_TITLE, created_at, created_at))
+        conn.execute(
+            INSERT_THREAD,
+            (thread_id, NEW_CONVERSATION_TITLE, created_at, created_at, client),
+        )
     return ThreadCreated(thread_id=thread_id, title=NEW_CONVERSATION_TITLE, created_at=created_at)
 
 
 @router.get("/threads", response_model=list[ThreadSummary], response_model_exclude_none=False)
-def list_threads(path: Path = Depends(database_path)) -> list[ThreadSummary]:
+def list_threads(
+    path: Path = Depends(database_path),
+    client: str = Depends(client_id),
+) -> list[ThreadSummary]:
     with read_db(path) as conn:
-        rows = conn.execute(LIST_THREADS).fetchall()
+        rows = conn.execute(LIST_THREADS, (client,)).fetchall()
     return [
         ThreadSummary(
             thread_id=row["thread_id"],
@@ -158,9 +201,10 @@ def get_thread(
     thread_id: str,
     request: Request,
     path: Path = Depends(database_path),
+    client: str = Depends(client_id),
 ) -> ThreadDetail:
     with read_db(path) as conn:
-        row = _thread_row(conn, thread_id)
+        row = _thread_row(conn, thread_id, client)
         messages = _messages_for_thread(conn, thread_id)
     return _thread_detail(row, messages, request.app.state.corpus)
 
@@ -175,12 +219,14 @@ def post_message(
     body: MessageRequest,
     request: Request,
     path: Path = Depends(database_path),
+    client: str = Depends(client_id),
 ) -> PostedMessage:
     text = _validated_text(body.text)
     corpus: Corpus = request.app.state.corpus
     settings = request.app.state.settings
     with read_db(path) as conn:
-        thread = _thread_row(conn, thread_id)
+        thread = _thread_row(conn, thread_id, client)
+    enforce_message_limit(request)
     result = classify(text, corpus, thread["active_scheme_id"])
     now = utc_now()
     if result.intent == "pii":
@@ -225,8 +271,16 @@ def _validated_text(raw: str) -> str:
     return text
 
 
-def _thread_row(conn: sqlite3.Connection, thread_id: str) -> sqlite3.Row:
-    row = conn.execute(SELECT_THREAD, (thread_id,)).fetchone()
+def _thread_row(
+    conn: sqlite3.Connection,
+    thread_id: str,
+    client: str | None = None,
+) -> sqlite3.Row:
+    """Another browser's thread is reported as missing, never as forbidden."""
+    if client is None:
+        row = conn.execute(SELECT_THREAD, (thread_id,)).fetchone()
+    else:
+        row = conn.execute(SELECT_OWN_THREAD, (thread_id, client)).fetchone()
     if row is None:
         raise HTTPException(status_code=404, detail="thread not found")
     return row

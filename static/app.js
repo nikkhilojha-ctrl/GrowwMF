@@ -223,7 +223,7 @@ async function request(path, options = {}) {
     headers["Content-Type"] = "application/json";
   }
   const response = await fetch(path, {
-    credentials: "omit",
+    credentials: "same-origin",
     ...options,
     headers,
   });

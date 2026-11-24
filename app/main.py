@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from app.db import corpus_status, init_database, read_db
+from app.ratelimit import RateLimiter
 from app.schemes import load_corpus
 from app.settings import get_settings
 from app.threads import router as threads_router
@@ -65,6 +66,10 @@ def create_app() -> FastAPI:
     application.state.settings = settings
     application.state.database_path = settings.database_path
     application.state.corpus = load_corpus()
+    application.state.message_limiter = RateLimiter(
+        per_client=settings.rate_limit_per_minute,
+        global_limit=settings.rate_limit_global_per_minute,
+    )
     application.include_router(threads_router)
     application.add_api_route(
         "/api/schemes",

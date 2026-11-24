@@ -14,6 +14,13 @@ def _blank_groq_key(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("GROQ_API_KEY", "")
 
 
+@pytest.fixture(autouse=True)
+def _no_rate_limit(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Suites post many messages quickly. Limiter tests set limits after this."""
+    monkeypatch.setenv("RATE_LIMIT_PER_MINUTE", "0")
+    monkeypatch.setenv("RATE_LIMIT_GLOBAL_PER_MINUTE", "0")
+
+
 @pytest.fixture
 def database_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     path = tmp_path / "assistant.db"
