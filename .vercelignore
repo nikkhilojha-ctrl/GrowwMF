@@ -1,0 +1,5 @@
+# Vercel only serves static/. Keep the Python backend out so Vercel does not
+# try to detect and build it as a Python app.
+/*
+!/static
+!/vercel.json

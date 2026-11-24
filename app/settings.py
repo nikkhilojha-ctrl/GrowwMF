@@ -12,6 +12,8 @@ DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
 DEFAULT_GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 DEFAULT_DATABASE_PATH = "data/assistant.db"
 DEFAULT_EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+DEFAULT_RATE_LIMIT_PER_MINUTE = 10
+DEFAULT_RATE_LIMIT_GLOBAL_PER_MINUTE = 200
 
 
 def _load_dotenv(path: Path) -> None:
@@ -39,6 +41,16 @@ def _env(name: str, default: str = "") -> str:
     return value or default
 
 
+def _env_int(name: str, default: int) -> int:
+    raw = _env(name)
+    if not raw:
+        return default
+    try:
+        return max(0, int(raw))
+    except ValueError:
+        return default
+
+
 @dataclass(frozen=True, repr=False)
 class Settings:
     groq_api_key: str
@@ -46,6 +58,8 @@ class Settings:
     groq_base_url: str
     database_path: Path
     embedding_model: str
+    rate_limit_per_minute: int = DEFAULT_RATE_LIMIT_PER_MINUTE
+    rate_limit_global_per_minute: int = DEFAULT_RATE_LIMIT_GLOBAL_PER_MINUTE
 
     @property
     def chat_enabled(self) -> bool:
@@ -59,7 +73,9 @@ class Settings:
             f"groq_model={self.groq_model!r}, "
             f"groq_base_url={self.groq_base_url!r}, "
             f"database_path={str(self.database_path)!r}, "
-            f"embedding_model={self.embedding_model!r})"
+            f"embedding_model={self.embedding_model!r}, "
+            f"rate_limit_per_minute={self.rate_limit_per_minute}, "
+            f"rate_limit_global_per_minute={self.rate_limit_global_per_minute})"
         )
 
 
@@ -74,4 +90,8 @@ def get_settings() -> Settings:
         groq_base_url=_env("GROQ_BASE_URL", DEFAULT_GROQ_BASE_URL).rstrip("/"),
         database_path=database_path,
         embedding_model=_env("EMBEDDING_MODEL", DEFAULT_EMBEDDING_MODEL),
+        rate_limit_per_minute=_env_int("RATE_LIMIT_PER_MINUTE", DEFAULT_RATE_LIMIT_PER_MINUTE),
+        rate_limit_global_per_minute=_env_int(
+            "RATE_LIMIT_GLOBAL_PER_MINUTE", DEFAULT_RATE_LIMIT_GLOBAL_PER_MINUTE
+        ),
     )

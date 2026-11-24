@@ -150,6 +150,7 @@ def test_overlapping_posts_do_not_cross_threads(database_path: Path):
     with TestClient(setup) as starter:
         thread_a = starter.post("/api/threads").json()["thread_id"]
         thread_b = starter.post("/api/threads").json()["thread_id"]
+        browser = dict(starter.cookies)
 
     barrier = threading.Barrier(2)
     errors: list[BaseException] = []
@@ -157,7 +158,7 @@ def test_overlapping_posts_do_not_cross_threads(database_path: Path):
     def post(thread_id: str, text: str) -> None:
         try:
             application = create_app()
-            with TestClient(application) as local:
+            with TestClient(application, cookies=browser) as local:
                 barrier.wait(timeout=5)
                 response = local.post(
                     f"/api/threads/{thread_id}/messages",
@@ -179,7 +180,7 @@ def test_overlapping_posts_do_not_cross_threads(database_path: Path):
     assert errors == []
 
     reader = create_app()
-    with TestClient(reader) as restarted:
+    with TestClient(reader, cookies=browser) as restarted:
         transcript_a = restarted.get(f"/api/threads/{thread_a}").json()
         transcript_b = restarted.get(f"/api/threads/{thread_b}").json()
     assert [message["text"] for message in transcript_a["messages"] if message["role"] == "user"] == [
@@ -202,9 +203,10 @@ def test_threads_survive_a_new_process(database_path: Path):
             f"/api/threads/{thread_id}/messages",
             json={"text": "still here"},
         ).status_code == 200
+        browser = dict(starter.cookies)
 
     second = create_app()
-    with TestClient(second) as restarted:
+    with TestClient(second, cookies=browser) as restarted:
         listing = restarted.get("/api/threads").json()
         detail = restarted.get(f"/api/threads/{thread_id}").json()
     assert listing[0]["thread_id"] == thread_id
@@ -439,6 +441,7 @@ def test_overlapping_posts_on_one_thread_stay_on_that_thread(database_path: Path
     setup = create_app()
     with TestClient(setup) as starter:
         thread_id = starter.post("/api/threads").json()["thread_id"]
+        browser = dict(starter.cookies)
     _fact(database_path, "uti-elss", ELSS_TER, corpus.scheme("uti-elss").factsheet_url)
     _fact(database_path, "uti-nifty", NIFTY_TER, corpus.scheme("uti-nifty").factsheet_url)
 
@@ -449,7 +452,7 @@ def test_overlapping_posts_on_one_thread_stay_on_that_thread(database_path: Path
     def post(label: str, text: str) -> None:
         try:
             application = create_app()
-            with TestClient(application) as local:
+            with TestClient(application, cookies=browser) as local:
                 barrier.wait(timeout=5)
                 response = local.post(f"/api/threads/{thread_id}/messages", json={"text": text})
                 if response.status_code != 200:
@@ -479,7 +482,7 @@ def test_overlapping_posts_on_one_thread_stay_on_that_thread(database_path: Path
     assert NIFTY_TER in found["nifty"]["text"]
 
     reader = create_app()
-    with TestClient(reader) as restarted:
+    with TestClient(reader, cookies=browser) as restarted:
         transcript = restarted.get(f"/api/threads/{thread_id}").json()
         others = restarted.get("/api/threads").json()
     assert transcript["active_scheme_id"] in {"uti-elss", "uti-nifty"}
